@@ -4,13 +4,14 @@
   >
       <input
         ref="input"
-        v-model="field.value"
+        v-model="fieldValue"
         @keyup.enter="updateFieldValue"
         @blur="updateFieldValue"
         type="text"
         :disabled="loading"
         class="form-control form-input form-input-bordered o1-w-full"
         @click.stop.capture="true"
+        :style="field.style"
       />
     <!-- thanks to https://github.com/epartment/nova-unique-ajax-field/blob/master/resources/js/components/FormField.vue -->
     <div class="absolute rotating text-80 flex justify-center items-center pin-y pin-r mr-3" v-show="loading">

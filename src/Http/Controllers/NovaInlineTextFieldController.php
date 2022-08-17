@@ -4,6 +4,7 @@ namespace Outl1ne\NovaInlineTextField\Http\Controllers;
 
 use Exception;
 use Illuminate\Routing\Controller;
+use Laravel\Nova\Panel;
 use Outl1ne\NovaInlineTextField\InlineText;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -28,9 +29,25 @@ class NovaInlineTextFieldController extends Controller
             $resource = new $resourceClass($model);
 
             $allFields = collect($resource->fields($request));
-            $field = $allFields->first(function ($field) use ($attribute) {
-                return get_class($field) === InlineText::class && $field->attribute === $attribute;
-            });
+
+            $field = null;
+            foreach ($allFields as $_field){
+
+                $class = get_class($_field);
+                if ($class === Panel::class){
+
+                    $panelFields = collect($_field->data);
+                    $field = $panelFields->first(function ($f) use ($attribute){
+                        return get_class($f) === InlineText::class && $f->attribute === $attribute;
+                    });
+
+                    if ($field) break;
+                } else  if ($class == InlineText::class && $field->attribute === $attribute){
+                    $field = $_field;
+                    break;
+                }
+            }
+
 
             $field->fillInto($request, $model, $attribute);
             $model->save();
