@@ -20,6 +20,20 @@
   </div>
 </template>
 
+<style lang="scss">
+  @-webkit-keyframes rotating {
+    from{
+      transform: rotate(0deg);
+    }
+    to{
+      transform: rotate(360deg);
+    }
+  }
+  .rotating {
+    animation: rotating 2s linear infinite;
+  }
+</style>
+
 <script>
 import EditIcon from '../icons/EditIcon';
 import CancelIcon from '../icons/CancelIcon';
