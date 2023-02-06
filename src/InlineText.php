@@ -11,6 +11,7 @@ class InlineText extends Text
     protected array $styles = [];
 
     protected bool $isEditable = true;
+    protected bool $isViewable = true;
 
     protected function resolveAttribute($resource, $attribute)
     {
@@ -25,8 +26,19 @@ class InlineText extends Text
         return $this;
     }
 
+    /**
+     * Check if field should show the value at index
+     * @param callable|bool $flag
+     * @return $this
+     */
+    public function viewable(callable|bool $flag = true): static
+    {
+        $this->isViewable = is_callable($flag) ? $flag() : $flag;
+        return $this;
+    }
 
     /**
+     * Check if field should be editable at index
      * @param callable|bool $flag
      * @return $this
      */
@@ -40,7 +52,8 @@ class InlineText extends Text
     {
         $this->withMeta([
             'style' => join(';', $this->styles),
-            'editable' => $this->isEditable
+            'editable' => $this->isEditable,
+            'viewable' => $this->isViewable
         ]);
 
         return parent::jsonSerialize();

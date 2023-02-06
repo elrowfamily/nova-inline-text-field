@@ -1,5 +1,5 @@
 <template>
-  <div v-if="field.editable"
+  <div v-if="editableAndViewable"
     :class="`nova-inline-text-field-index text-${field.textAlign} w-full`"
   >
       <input
@@ -20,7 +20,7 @@
   </div>
   <div v-else>
     <div :class="`text-${field.textAlign}`">
-      <template v-if="hasValue">
+      <template v-if="hasValueAndViewable">
         <div v-if="field.asHtml" v-html="field.value"></div>
         <span v-else class="whitespace-no-wrap">{{ field.value }}</span>
       </template>
@@ -110,6 +110,15 @@ export default {
     hasValue() {
       return this.field.value !== null;
     },
+
+    editableAndViewable(){
+
+      return this.field.editable && this.field.viewable;
+    },
+
+    hasValueAndViewable(){
+      return this.field.viewable && this.field.value !== null;
+    }
   },
 };
 </script>
