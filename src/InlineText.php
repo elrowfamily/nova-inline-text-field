@@ -10,6 +10,8 @@ class InlineText extends Text
 
     protected array $styles = [];
 
+    protected bool $isEditable = true;
+
     protected function resolveAttribute($resource, $attribute)
     {
         $this->withMeta(['resourceId' => $resource->getKey()]);
@@ -23,9 +25,24 @@ class InlineText extends Text
         return $this;
     }
 
+
+    /**
+     * @param callable|bool $flag
+     * @return $this
+     */
+    public function editable(callable|bool $flag = true): static
+    {
+        $this->isEditable = is_callable($flag) ? $flag() : $flag;
+        return $this;
+    }
+
     public function jsonSerialize(): array
     {
-        $this->withMeta(['style' => join(';', $this->styles)]);
+        $this->withMeta([
+            'style' => join(';', $this->styles),
+            'editable' => $this->isEditable
+        ]);
+
         return parent::jsonSerialize();
     }
 
